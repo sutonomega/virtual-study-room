@@ -113,9 +113,12 @@ function App() {
         const duration = s.end
           ? Math.floor((s.end.getTime() - s.start.getTime()) / 1000 / 60)
           : 0
+    const sessionTags = s.tags.length
+      ? `tags: ${s.tags.join(', ')}`
+      : ''
 
         return `## ${s.title}
-
+${sessionTags}
 start: ${s.start.toISOString()}
 end: ${s.end?.toISOString()}
 duration_minutes: ${duration}`
