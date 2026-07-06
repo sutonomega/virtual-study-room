@@ -1,39 +1,75 @@
-# virtual-study-room
+# React + TypeScript + Vite
 
-**作業も、ゲームも、休憩も。今日という時間を積み重ねる仮想自習室。**
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-**virtual-study-room** は、タスク管理アプリではありません。
+Currently, two official plugins are available:
 
-`in` で部屋に入り、`out` で部屋を出る。
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-作業、ゲーム、読書、動画視聴など、その日に過ごした時間をMarkdownとして記録し、あとから振り返るための「仮想自習室」です。
+## React Compiler
 
-時間を管理するのではなく、時間を積み重ねる。
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-今日も、自習室に入ろう。
+## Expanding the ESLint configuration
 
----
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-## 使い方（MVP）
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
 
-- inで入室（作業を開始する）
-- outで退室（作業を終了する）
-- 作業ログがMarkdownとして保存される
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
 
----
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 
-## 📁 ディレクトリ構成
+```
 
-```text
-virtual-study-room/
-├── docs/
-│   ├── concept.md
-│   ├── commands.md
-│   ├── log-format.md
-│   ├── roadmap.md        ← 将来的に追加
-│   ├── ui.md             ← UI仕様
-│   └── architecture.md   ← システム設計
-├── src/
-├── README.md
-└── LICENSE
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
+
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+
 ```
