@@ -11,3 +11,29 @@
 時間を管理するのではなく、時間を積み重ねる。
 
 今日も、自習室に入ろう。
+
+---
+
+## 使い方（MVP）
+
+- inで入室（作業を開始する）
+- outで退室（作業を終了する）
+- 作業ログがMarkdownとして保存される
+
+---
+
+## 📁 ディレクトリ構成
+
+```text
+virtual-study-room/
+├── docs/
+│   ├── concept.md
+│   ├── commands.md
+│   ├── log-format.md
+│   ├── roadmap.md        ← 将来的に追加
+│   ├── ui.md             ← UI仕様
+│   └── architecture.md   ← システム設計
+├── src/
+├── README.md
+└── LICENSE
+```
