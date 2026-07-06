@@ -1,5 +1,7 @@
+import type { Log } from '../App'
+
 type LogPanelProps = {
-  logs: string[]
+  logs: Log[]
 }
 
 function LogPanel({ logs }: LogPanelProps) {
@@ -12,7 +14,7 @@ function LogPanel({ logs }: LogPanelProps) {
       ) : (
         <ul>
           {logs.map((log, index) => (
-            <li key={index}>{log}</li>
+            <li key={index}>{log.message}</li>
           ))}
         </ul>
       )}
