@@ -20,6 +20,7 @@ function App() {
   const [title, setTitle] = useState('')
   const [tags, setTags] = useState('')
   const [session, setSession] = useState<Session | null>(null)
+  const [sessions, setSessions] = useState<Session[]>([])
   const isWorking = session !== null && session.end === null
   const [logs, setLogs] = useState<Log[]>([])
   const [elapsedTime, setElapsedTime] = useState('00:00:00')
@@ -54,22 +55,27 @@ function App() {
 
     const end = new Date()
 
-    setSession({
+    const finishedSession = {
       ...session,
       end,
-    })
+    }
 
-    setLogs((prev) => [
-      ...prev,
-      {
-        time: end,
-        message: `${session.title} を終了しました`,
-      },
-    ])
+    const nextSessions = [...sessions, finishedSession]
+
+    setSessions(nextSessions)
+
+    const markdown = generateMarkdown(nextSessions)
+    const blob = new Blob([markdown], { type: 'text/markdown' })
+    const url = URL.createObjectURL(blob)
+
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `${new Date().toISOString().slice(0, 10)}.md`
+    a.click()
+
+    URL.revokeObjectURL(url)
 
     setSession(null)
-    setElapsedTime('00:00:00')
-
   }
 
   const formatDuration = (milliseconds: number) => {
@@ -94,6 +100,36 @@ function App() {
     }, 1000)
     return () => clearInterval(interval)
   }, [session])
+
+  const generateMarkdown = (sessions: Session[]) => {
+    const date = new Date().toISOString().slice(0, 10)
+
+    const tags = Array.from(
+      new Set(sessions.flatMap((s) => s.tags))
+    )
+
+    const body = sessions
+      .map((s) => {
+        const duration = s.end
+          ? Math.floor((s.end.getTime() - s.start.getTime()) / 1000 / 60)
+          : 0
+
+        return `## ${s.title}
+
+start: ${s.start.toISOString()}
+end: ${s.end?.toISOString()}
+duration_minutes: ${duration}`
+    })
+    .join('\n\n---\n\n')
+
+    return `---
+title: ${date}
+tags: [${tags.join(', ')}]
+---
+
+${body}
+`
+  }
 
   return (
     <main>
